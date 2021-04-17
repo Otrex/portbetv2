@@ -8,7 +8,7 @@
         <div class="topnav">
           <div class="row">
             <div class="col-md-6">
-              <div class="row">
+              <div class="flex-h">
                 <div class="today">
                   <div class="time">{{ctime}}</div>
                   <div class="date">{{cdate}}</div>
