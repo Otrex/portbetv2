@@ -59,13 +59,13 @@
                 <table border="1" id="calculations">
                   <th> Sn </th>
                   <th> DATE </th><th colspan="2"> MATCH </th><th> NGOALS </th>
-                  <th colspan="2"> GF_AVG </th><th> GA_AVG </th><th> POW </th>
-                  <th> PTS </th>
+                  <th colspan="2"> GF_AVG </th><th colspan="2"> GA_AVG </th><th colspan="2"> POW </th>
+                  <th colspan="2"> PTS </th>
 
                   <tr v-for="(calc, key) in calculations" :key="key">
-                    <td>{{calc.sn}}</td><td>{{calc.date}}</td><td>{{calc.team_name[0]}}</td><td>{{calc.team_name[1]}}</td><td>{{calc.ngoals}}</td>
-                    <td>{{calc.gf_avg[0]}}</td><td>{{calc.gf_avg[1]}}</td><td>{{calc.ga_avg[0]}}</td><td>{{calc.ga_avg[1]}}</td>
-                    <td>{{calc.pow[0]}}</td><td>{{calc.pow[1]}}</td><td>{{calc.pts[0]}}</td><td>{{calc.pts[1]}}</td>
+                    <td>{{calc.sn}}</td><td>{{calc.timestamp}}</td><td>{{calc.teams_name[0]}}</td><td>{{calc.teams_name[1]}}</td><td>{{to2dp(calc.ngoals)}}</td>
+                    <td>{{to2dp(calc.gf_avg[0]) }}</td><td>{{to2dp(calc.gf_avg[1])}}</td><td>{{to2dp(calc.ga_avg[0])}}</td><td>{{to2dp(calc.ga_avg[1])}}</td>
+                    <td>{{to2dp(calc.pow[0])}}</td><td>{{to2dp(calc.pow[1])}}</td><td>{{calc.pts[0]}}</td><td>{{calc.pts[1]}}</td>
                   </tr>
 
                 </table>
@@ -110,7 +110,6 @@ export default {
     ctime : function() {
       return this.c_time
     }
-
   },
   created() {
     let self = this
@@ -139,12 +138,18 @@ export default {
     }
   },
   methods : {
+    to2dp : function(value) {
+      return(Math.round(value * 100) / 100);
+    },
     run_calculations : function(fix) {
-      console.log(fix)
+      // console.log(fix)
       let data = {}
-      let teamAWAY = this.leagues_table.find((l)=>{l.id == fix.away.team_id})
-      let teamHOME = this.leagues_table.find((l)=>{l.id == fix.home.team_id})
-      if (!teamAWAY || !teamAWAY) {alert("Errror"); return}
+      let teamAWAY = this.leagues_table.find((l)=>l.id == fix.away.team_id)
+      let teamHOME = this.leagues_table.find((l)=>l.id == fix.home.team_id)
+      // if (!teamAWAY || !teamAWAY) {alert("Errror"); return}
+      if (!teamHOME && !teamAWAY) return
+      // console.log([teamAWAY, teamHOME])
+
       data.sn = 0
       data.gf_avg = [teamHOME.data.goalsFor/teamHOME.data.matchsPlayed, teamAWAY.data.goalsFor/teamAWAY.data.matchsPlayed]
       data.ga_avg = [teamHOME.data.goalsAgainst/teamHOME.data.matchsPlayed, teamAWAY.data.goalsAgainst/teamAWAY.data.matchsPlayed]
@@ -184,7 +189,6 @@ export default {
     },
     toggletheme : () => {
       let rs = getComputedStyle(r);
-
       if (rs.getPropertyValue('--bg-color-2') === 'white') {
         r.style.setProperty('--bg-color-2', 'black');
         r.style.setProperty('--bg-color', 'rgba(0,0,0, .5)');
@@ -194,8 +198,6 @@ export default {
         r.style.setProperty('--bg-color', 'rgba(240, 245, 255, 1)');
         r.style.setProperty('--color', 'black');
       }
-      
-      
     },
     country_img_src : (country) => {
       return `/flags/svg/${country}.svg`
@@ -253,7 +255,7 @@ export default {
               league : fixtures.league
             }
             this.fixt.push(x)
-            this.calculations(x)
+            this.run_calculations(x)
           })
         },
         (err) => {
@@ -272,6 +274,7 @@ export default {
 .loader-wrapper {
   position: fixed;
   z-index: 30000;
+  background: white;
 }
 .floater {
   position: fixed;
@@ -437,6 +440,7 @@ input.date-picker {
 
 .card{
   background-color: var(--bg-color-2) !important;
+  overflow: auto;
 }
 #panels table {
   font-size: 14px;
