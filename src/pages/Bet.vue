@@ -38,7 +38,7 @@
             <div class="vcenter"><b>Today:</b> {{cdate}}</div>
             <div class="fixture-date-picker" >
               <div style="position:relative;">
-                <input type="date" @keyup.enter="get_all_fixtures" v-model="end_date" class="date-picker m-info" name="date"><span class="m-ref bottom"> Enter the Required date </span>
+                <input type="date" @keyup.enter="get_all_fixtures" @blur="get_all_fixtures" v-model="end_date" class="date-picker m-info" name="date"><span class="m-ref bottom"> Enter the Required date </span>
               </div>
             </div>
             <div class="vcenter"><b>Time:</b> {{ctime}}</div>
@@ -158,7 +158,7 @@ export default {
       data.ngoals = data.gf_avg.reduce((total, value) => total + value)/2
       data.pow = [data.gf_avg[0]/data.ga_avg[0], data.gf_avg[1]/data.ga_avg[1]]
       data.pts = [teamHOME.points, teamAWAY.points]
-      data.timestamp = moment(fix.timestamp).format('DD, HH:mm')
+      data.timestamp = moment(fix.timestamp).format('DD-MM-YYYY, HH:mm')
 
       this.calculations.push(data)
       console.log(this.calculations)
