@@ -51,38 +51,41 @@
           <div class="loader"> Loading ...</div>
         </div>
         <div class="centralized-entry" v-if="!current_league_id"> 
-          <div>Please select a country and league of your choice, Then Select a date</div> </div>
-        <div class="row no-gutters">
-          <div class="col-md-7">
-            <div id="panel1">
-              <div class="card">
-                <table border="1" id="calculations">
-                  <th> Sn </th>
-                  <th> DATE </th><th colspan="2"> MATCH </th><th> NGOALS </th>
-                  <th colspan="2"> GF_AVG </th><th colspan="2"> GA_AVG </th><th colspan="2"> POW </th>
-                  <th colspan="2"> PTS </th>
+          <div>Please select a country and league of your choice, Then Select a date</div> 
+        </div>
+        <div style="">
+          <div class="row no-gutters">
+            <div class="col-md-7 mb-3">
+              <div id="panel1">
+                <div class="card">
+                  <table border="1" id="calculations">
+                    <th> FLAGS </th>
+                    <th> DATE </th><th colspan="2"> MATCH </th><th> NGOALS </th>
+                    <th colspan="2"> GF_AVG </th><th colspan="2"> GA_AVG </th><th colspan="2"> POW </th>
+                    <th colspan="2"> PTS </th>
 
-                  <tr v-for="(calc, key) in calculations" :key="key">
-                    <td>{{calc.sn}}</td><td>{{calc.timestamp}}</td><td>{{calc.teams_name[0]}}</td><td>{{calc.teams_name[1]}}</td><td>{{to2dp(calc.ngoals)}}</td>
-                    <td>{{to2dp(calc.gf_avg[0]) }}</td><td>{{to2dp(calc.gf_avg[1])}}</td><td>{{to2dp(calc.ga_avg[0])}}</td><td>{{to2dp(calc.ga_avg[1])}}</td>
-                    <td>{{to2dp(calc.pow[0])}}</td><td>{{to2dp(calc.pow[1])}}</td><td>{{calc.pts[0]}}</td><td>{{calc.pts[1]}}</td>
-                  </tr>
+                    <tr v-for="(calc, key) in calculations" :key="key">
+                      <td>{{calc.sn}}</td><td>{{calc.timestamp}}</td><td>{{calc.teams_name[0]}}</td><td>{{calc.teams_name[1]}}</td><td>{{to2dp(calc.ngoals)}}</td>
+                      <td>{{to2dp(calc.gf_avg[0]) }}</td><td>{{to2dp(calc.gf_avg[1])}}</td><td>{{to2dp(calc.ga_avg[0])}}</td><td>{{to2dp(calc.ga_avg[1])}}</td>
+                      <td>{{to2dp(calc.pow[0])}}</td><td>{{to2dp(calc.pow[1])}}</td><td>{{calc.pts[0]}}</td><td>{{calc.pts[1]}}</td>
+                    </tr>
 
-                </table>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="col-md-5">
-            <div id="panel2">
-              <div class="card">
-                <table border="1" id="league-table">
-                   <th> NAME </th><th> RANK </th>
-                   <th> PTS </th> <th> GF </th><th> GA </th><th> GD </th><th>FORM</th>
-                   <tr v-for="(xteam, key) in leagues_table" :key="key">
-                    <td>{{xteam.name}}</td><td>{{xteam.rank}}</td><td>{{xteam.points}}</td><td>{{xteam.data.goalsFor}}</td><td>{{xteam.data.goalsAgainst}}</td><td>{{xteam.data.GD}}</td> <td>{{xteam.form}}</td>
-                   </tr>
-               </table>
-             </div>
+            <div class="col-md-5">
+              <div id="panel2">
+                <div class="card">
+                  <table border="1" id="league-table">
+                     <th> NAME </th><th> RANK </th>
+                     <th> PTS </th> <th> GF </th><th> GA </th><th> GD </th><th>FORM</th>
+                     <tr v-for="(xteam, key) in leagues_table" :key="key">
+                      <td>{{xteam.name}}</td><td>{{xteam.rank}}</td><td>{{xteam.points}}</td><td>{{xteam.data.goalsFor}}</td><td>{{xteam.data.goalsAgainst}}</td><td>{{xteam.data.GD}}</td> <td>{{xteam.form}}</td>
+                     </tr>
+                 </table>
+               </div>
+              </div>
             </div>
           </div>
         </div>
@@ -158,7 +161,7 @@ export default {
       data.ngoals = data.gf_avg.reduce((total, value) => total + value)/2
       data.pow = [data.gf_avg[0]/data.ga_avg[0], data.gf_avg[1]/data.ga_avg[1]]
       data.pts = [teamHOME.points, teamAWAY.points]
-      data.timestamp = moment(fix.timestamp).format('DD-MM-YYYY, HH:mm')
+      data.timestamp = moment(fix.timestamp).format('DD, HH:mm')
 
       this.calculations.push(data)
       console.log(this.calculations)
@@ -270,7 +273,9 @@ export default {
 <style>
 .bet * {
   color : var(--color);
+  border: 1px solid red;
 }
+.bet {}
 .loader-wrapper {
   position: fixed;
   z-index: 30000;
@@ -323,7 +328,8 @@ export default {
   position: fixed;
   top:60px;
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 65px);
+  overflow: auto;
   width: calc(100% - 120px);
   padding: 10px 15px;
 }
@@ -438,6 +444,10 @@ input.date-picker {
   width: 700px !important;
 }
 
+table tr td {
+  padding: 5px;
+}
+
 .card{
   background-color: var(--bg-color-2) !important;
   overflow: auto;
@@ -465,8 +475,9 @@ input.date-picker {
     margin-right: 0px;
   }
   #panels {
-    top:50px;
+    top:90px;
     width: 100%;
+    height: calc(100vh - 185px);
   }
   #topbar{
   position: fixed;
