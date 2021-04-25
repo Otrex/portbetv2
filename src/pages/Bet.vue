@@ -273,7 +273,7 @@ export default {
 <style>
 .bet * {
   color : var(--color);
-  border: 1px solid red;
+  /*border: 1px solid red;*/
 }
 .bet {}
 .loader-wrapper {
